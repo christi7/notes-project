@@ -1,0 +1,32 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Profile | Notes {% endblock %}
+
+{%  load static %}
+
+{% block meta %}
+<link rel="stylesheet" href="{%static 'posts/post.css'%}">
+<link rel="stylesheet" href="{% static 'users/profile.css' %}?v=3">
+{%endblock%}
+
+{% block content %}
+<div class="profile-container">
+    <h1>{{ user.username }}</h1>
+    <p>{{ user.bio }}</p> 
+    {% if is_self %}
+    <a href="{% url 'users:edit_bio' user.pk %}?next={{ request.path|urlencode }}"><button type="button">Edit Bio</button></a>
+    <a href="{% url 'users:delete_user' user.pk %}"><button type="button" class="delete-btn">Delete</button></a>
+    {% endif %}
+
+    <h2>posts:</h2>
+    {% if user.posts.count != 0 %}
+    <ul>
+        {% for user_post in user.posts.all %}
+            <li class="post">{% include "posts/post.html" with post=user_post %}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h6>This user has no posts available</h6>
+    {% endif %}
+</div>
+{% endblock %}

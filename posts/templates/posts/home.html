@@ -1,0 +1,13 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Home | Notes{% endblock %}
+
+{% load static %}
+
+{% block meta %} <link rel="stylesheet" href="{% static 'posts/post.css' %}?v=4"> {%endblock%}
+
+{% block content %}
+    {% for post in posts %}
+    {%include "posts/post.html" with post=post%}
+    {% endfor %}
+{% endblock %}

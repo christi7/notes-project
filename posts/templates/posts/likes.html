@@ -1,0 +1,18 @@
+<div class="likes" id="likes-{{post.pk}}">
+
+<p>Likes: {{ post.likers.count }}</p> 
+
+{% csrf_token %}
+<button type="button" class="like-btn" 
+hx-post="{% url 'posts:like-post' post.pk %}"
+hx-trigger="click"
+hx-swap="outerHTML"
+hx-target="#likes-{{post.pk}}">
+    {% if request.user in post.likers.all %}
+    Unlike
+    {% else %}
+    Like
+    {% endif %}
+</button>
+
+</div>

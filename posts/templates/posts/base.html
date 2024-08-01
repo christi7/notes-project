@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Notes {% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'posts/base.css' %}?v=1">
+    <link rel="stylesheet" href="{% static 'posts/nav_header.css' %}?v=4">
+    <script src="{% static 'posts/htmx.min.js' %}"></script>
+
+    <script>
+        document.addEventListener("htmx:configRequest", (event) => {
+            let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            event.detail.headers['X-CSRFToken'] = csrfToken;
+        });
+    </script>
+
+    {% block meta %} {% endblock %}
+</head>
+<body>
+    <div class="top-bar">
+        <header class="header">
+        <a href="{% url 'users:my-profile' %}"><h2>My Profile</h2></a>
+
+        <a href="{% url 'posts:home' %}"><h2>Home</h2></a>
+
+        {% csrf_token %}
+        <input type="search" name="user-search" 
+        class="user-search" placeholder="search users..." 
+        hx-post="{% url 'users:search' %}"
+        hx-trigger="input changed delay:500ms, search"
+        hx-swap="innerHTML"
+        hx-target="#user-search-results">
+
+        <a href="{% url 'posts:create-post' %}"><h2>Create Post</h2></a>
+
+        {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'users:logout' %}?next={{ request.path|urlencode }}">
+            {% csrf_token %}
+            <button class="logout-btn" type="submit"><h2>Logout</h2></button>
+        </form>
+        {% else %}
+        <a href="{% url 'users:login' %}?next={{ request.path|urlencode }}"><button type="button" class="login-btn"><h2>Login</h2></button></a></button>
+        {% endif %}
+        
+        </header>
+        <div id="user-search-results"></div>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

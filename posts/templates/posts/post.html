@@ -1,0 +1,16 @@
+<div class="post">
+<div>
+    <a class="user-link" href="{% url 'users:profile-detail' post.poster.pk %}"><h2>{{ post.poster.username }}</h2></a> 
+    
+</div>
+<p>{{ post.creation_date }}</p> 
+{% if post.image %}
+<img src="{{ post.image.url }}" alt="Image">
+{% endif %}
+<p class="post-content">{{ post.content }}</p> 
+{% include 'posts/likes.html' with post=post %}
+{% if request.user == post.poster %}
+<a href="{% url 'posts:delete-post' post.pk %}?next={{ request.path|urlencode }}"><button type="button" class="delete-btn">Delete</button></a>
+{% endif %}
+<a href="{% url 'posts:post-detail' post.pk %}"> <p>{{ post.replies.count }} replies</p> </a>
+</div>

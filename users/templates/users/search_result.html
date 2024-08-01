@@ -1,0 +1,5 @@
+<ul>
+{% for result in results %}
+    <li><a href="{% url 'users:profile-detail' result.pk %}">{{ result.username }}</a></li>
+{% endfor %}
+</ul>

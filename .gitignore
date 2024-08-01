@@ -1,0 +1,9 @@
+#Database
+*.sqlite3
+
+#cache files
+/pycache/
+
+#database migration files
+/migrations/
+

@@ -1,0 +1,143 @@
+/* Container for each post */
+.post {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Poster information */
+.post a {
+    text-decoration: none;
+    color: #333;
+}
+
+.post a h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #007bff;
+}
+
+.post p {
+    color: #555;
+}
+
+/* Post image */
+.post img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Post content */
+.post-content {
+    margin: 20px 0;
+}
+
+/* Likes section */
+.likes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.likes p {
+    margin: 0;
+    color: #777;
+}
+
+/* Like button */
+.like-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.like-btn:hover {
+    background-color: #0056b3;
+}
+
+.like-btn:focus {
+    outline: none;
+}
+
+/* Delete button */
+.post .delete-btn {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.post .delete-btn:hover {
+    background-color: #c82333;
+}
+
+.post .delete-btn:focus {
+    outline: none;
+}
+
+/* Replies link */
+.post a p {
+    color: #007bff;
+    margin: 10px 0 0 0;
+    font-size: 1em;
+}
+
+.post a p:hover {
+    text-decoration: underline;
+}
+
+/* Styling for replies */
+.reply {
+    margin-left: 40px;
+    background-color: #f9f9f9;
+    border-color: #ccc;
+}
+
+.reply .post {
+    margin: 10px 0;
+}
+
+.user-link {
+    width: max-content;
+    display: block;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .post {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .post a h2 {
+        font-size: 1.2em;
+    }
+
+    .post p {
+        font-size: 0.9em;
+    }
+
+    .like-btn, .post .delete-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}

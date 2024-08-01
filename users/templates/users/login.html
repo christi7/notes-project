@@ -1,0 +1,19 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Login | Notes {% endblock %}
+
+{% load static %}
+
+{% block meta %} <link rel="stylesheet" href="{% static 'users/login.css'%}"> {% endblock %}
+
+{% block content %}
+<div class="login-form-container">
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+  <a href="{% url 'users:register' %}"><p>Register new account?</p></a>
+</div>
+{% endblock %}

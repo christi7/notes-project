@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bounce Ball Game</title>
+    <link rel="stylesheet" href="common-style.css">
+</head>
+<body>
+
+
+    <canvas id="myCanvas1" width="480" height="320"></canvas>
+    <div class="modal">
+        <div class="start-modal-content">
+            <button type="button" id="startBtn">START</button>
+        </div>
+        <div class="gameover-modal-content">
+            <button type="button">END</button>
+        </div>
+    </div>
+    <script>
+        //variable list start 
+
+        const canvas = document.getElementById('myCanvas1');
+        const ctx = canvas.getContext("2d");
+        //spawn or start 
+        let x = canvas.width / 2;
+        let y = canvas.height - 30;
+        //change in x and y for animation
+        let dx = 2;
+        let dy = -2;
+        //radius of ball for calculations
+        const ballRadius = 10;
+        let ballColor = "#0095DD"
+        //height and width of the paddle for calculations
+        const paddleHeight = 10;
+        const paddleWidth = 75;
+        // X-axis position of the paddle(moved by user input)
+        let paddleX = (canvas.width - canvas.height) / 2;
+        //handles paddle movement 
+        let rightPressed = false;
+        let leftPressed = false;
+        let score = 0;
+        
+        //variable list end
+
+        function randomColor() {
+            return Math.floor(Math.random()*16777215).toString(16);
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = ballColor;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+        }
+
+        function drawScore() {
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#0095DD";
+            ctx.fillText(`Score: ${score}`, 8, 20);
+        }
+
+        function draw() {
+            //clears and redraws the ball and paddle for animation
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            drawPaddle();
+            drawScore();
+
+            //reverses ball direction and changes it color when it hits a wall or top
+            if(x+dx < ballRadius || x+dx > canvas.width - ballRadius) {
+                dx = -dx;
+                ballColor = '#' + randomColor();
+            }
+
+            //handles ball collision with bottom and paddle
+            if(y+dy < ballRadius) {
+                dy = -dy
+                ballColor = '#' + randomColor();
+            } else if(y+dy > canvas.height - ballRadius) {
+                if ( x + ballRadius > paddleX  && x - ballRadius < paddleX + paddleWidth) {
+                    dy = -dy;
+                    score++;
+                } else {
+                    document.location.reload();
+                }
+            }
+            
+            //moves paddle
+            if (rightPressed) {
+                paddleX = Math.min(paddleX + 7, canvas.width - paddleWidth);
+            } else if (leftPressed) {
+                paddleX = Math.max(paddleX - 7, 0);
+            }
+
+            //moves ball
+            x += dx;
+            y += dy;
+
+            requestAnimationFrame(draw);
+        }
+        
+        //detects user input and manages varables for paddle movement
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+        document.addEventListener("mousemove", mouseMoveHandler, false);
+
+        function keyDownHandler(e) {
+            if (e.key === "Right" || e.key === "ArrowRight") {
+                 rightPressed = true;
+            } else if (e.key === "Left" || e.key === "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === "Right" || e.key === "ArrowRight") {
+                rightPressed = false;
+            } else if (e.key === "Left" || e.key === "ArrowLeft") {
+                 leftPressed = false;
+            }
+        }
+
+        function mouseMoveHandler(e) {
+            const relativeX = e.clientX - canvas.offsetLeft;
+            if (relativeX > 0 && relativeX < canvas.width) {
+                paddleX = relativeX - paddleWidth / 2;
+            }
+        }
+
+        const startBtn = document.getElementById('startBtn');
+        startBtn.addEventListener('click', function() {
+            document.getElementsByClassName('modal').item(0).setAttribute('style','display: none');
+            draw();
+        })
+    </script>
+</body>
+</html>

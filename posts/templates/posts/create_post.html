@@ -1,0 +1,18 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Create Post | Notes {% endblock %}
+
+{% load static %}
+
+{% block meta %} <link rel="stylesheet" href="{% static 'users/login.css' %}"> {% endblock %}
+
+{% block content %} 
+<div class="login-form-container">
+    <h2> Create Post</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+</div>
+{% endblock %}

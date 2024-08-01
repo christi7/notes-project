@@ -1,0 +1,24 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} Post | Notes {% endblock %}
+
+{% load static %}
+
+{% block meta %} <link rel="stylesheet" href="{% static 'posts/post.css' %}?v=3"> {% endblock %}
+
+{% block content %}
+    {% include 'posts/post.html' with post=post %}
+    <h3>Replies:</h3>
+    <form action="{% url 'posts:create-reply' %}" method="post"> 
+        {% csrf_token %}
+        <label for="reply_create_content">reply to post</label>
+        <input id="reply_create_content" type="text" name="content">
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <input type="submit" >
+    </form>
+    {% for reply in replies %}
+    <div class="reply">
+    {% include 'posts/post.html' with post=reply %}
+    </div>
+    {% endfor %}
+{% endblock %}

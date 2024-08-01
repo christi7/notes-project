@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRY NOT TO DIE!!</title>
+    <link rel="stylesheet" href="common-style.css">
+</head>
+<body>
+    
+    <canvas id="myCanvas3" width="480" height="320"><h1>Canvas is not supported</h1></canvas>
+    <div class="modal">
+        <table>
+
+        </table>
+        <div class="start-modal-content">            
+            <button type="button" id="startBtn">START</button>
+            <h2>GOOD LUCK</h2>
+        </div>
+        <div class="gameover-modal-content">
+            <button type="button">END</button>
+        </div>
+    </div>
+
+
+    <script>
+        const canvas = document.getElementById('myCanvas3');
+        const ctx = canvas.getContext("2d");
+        const charSprite = new Image();
+        charSprite.src = "dinasour-sprite.png";
+
+        const floorY = 170;
+        let obstDx = -2;
+        const obstX = [];
+        const obst = [{width:10,height:5},
+        {width:10,height:10}];
+        let obstInterval = 1;
+        let obstCount = 0;
+        const obstType = [];
+        const charHeight = 25;
+        let charY = floorY - charHeight;
+        let dy = 0;
+        const charX = 200;
+        const charWidth = 20;
+        let gameOver = false;
+        let score = 0;
+
+        function drawCharacter() {
+            ctx.beginPath();
+            ctx.drawImage(charSprite, 200, charY, charWidth, charHeight);
+            ctx.closePath();
+            charY += dy;
+       }
+       function drawFloor(){
+        ctx.beginPath();
+        ctx.moveTo(0, 170);
+        ctx.lineTo(canvas.width, floorY);
+        ctx.strokeStyle = "rgba(0, 0, 0, 1)";
+        ctx.stroke();
+        ctx.closePath();
+       }
+
+       function drawObst() {
+        if(obstInterval === 0) {
+            obstCount++;
+            obstX.unshift (canvas.width);
+            obstType.unshift(obst[Math.floor(Math.random() * 2)]) 
+            obstInterval = Math.ceil(40 + Math.random() * 80);
+        }
+        for(let i = obstCount - 1; i >= 0; i--) {
+            if (obstType[i]) {
+                ctx.beginPath();
+                ctx.fillStyle = 'black';
+                ctx.rect(obstX[i], floorY - obstType[i].height, obstType[i].width, obstType[i].height);
+                ctx.fill();
+                ctx.closePath();
+                obstX[i] += obstDx;
+                if(obstX[i] === 198 || obstX[i] === 197) {
+                    score += 1;
+                }
+                if(obstX[i] < 0 || !obstType[i]) {
+                    obstX.splice(i, 1);
+                    obstType.splice(i, 1);
+                }
+            }
+        }
+        obstInterval--;
+       }
+
+       function gravity() {
+        if(charY + charHeight === floorY) {
+            dy = 0
+        } else if(charY + charHeight > floorY ){
+            dy = 0;
+            charY = floorY - charHeight; 
+        } else {
+            dy += 0.3;
+        }
+       } 
+
+       function collisionDetection() {
+        for(let i = obstCount - 1; i >= 0; i--) {
+            if(obstType[i]) {
+                if(obstX[i] < charX + charWidth && obstX[i] > charX && charY + charHeight >= floorY - obstType[i].height) {
+                    gameOver = true;
+                }
+            } 
+        }
+       }
+
+       function drawScore() {
+        ctx.beginPath();
+        ctx.font = "12px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText(`Your score:${score}`,20,20);
+        ctx.closePath();
+       }
+
+        function draw() {
+            if(gameOver) {
+                document.getElementsByClassName('modal').item(0).removeAttribute('style');
+                document.getElementsByClassName('gameover-modal-content').item(0).setAttribute('style', 'display: block');
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCharacter();
+            drawFloor();
+            gravity();
+            drawObst();
+            drawScore();
+            collisionDetection();
+            requestAnimationFrame(draw);
+        }
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.getElementsByClassName('modal').item(0).setAttribute('style','display: none');
+            document.getElementsByClassName('start-modal-content').item(0).setAttribute('style','display: none');
+            draw();
+        });
+
+        canvas.addEventListener('click',handleJumpClick);
+        document.addEventListener('keydown',handleJumpKey);
+
+        function handleJumpKey(e) {
+            if(e.key === "w" || e.key === " ") {
+                if(charY === floorY - charHeight && dy === 0) {
+                    dy = -5;
+                }
+            }
+        }
+
+        function handleJumpClick() {
+            if(charY === floorY - charHeight && dy === 0) {
+                dy = -5;
+            }
+        }
+    </script>
+</body>
+</html>

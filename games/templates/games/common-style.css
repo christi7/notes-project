@@ -1,0 +1,44 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+canvas {
+    background: #eee;
+    margin: 0 auto;
+    display: block;
+    z-index: 0;
+}
+.modal {
+    width: 480px;
+    height: 320px;
+    background-color: rgb(247, 247, 249);
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+}
+.gameover-modal-content {
+    display: none;
+}
+#startBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: -moz-fit-content;
+    width: fit-content;
+    height: 1.5em;
+    border-radius: 1em;
+    border: 0;
+    background-color: aqua;
+    font-size: medium;
+}
+.start-modal-content > h2 {
+    position: absolute;
+    
+}
